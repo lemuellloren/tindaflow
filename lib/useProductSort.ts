@@ -10,8 +10,8 @@ export type SortKey =
   | 'price-desc';
 
 export const SORT_OPTIONS: { key: SortKey; label: string }[] = [
-  { key: 'name', label: 'Name (A–Z)' },
-  { key: 'category', label: 'Category (A–Z)' },
+  { key: 'name', label: 'Name (A-Z)' },
+  { key: 'category', label: 'Category (A-Z)' },
   { key: 'stock-asc', label: 'Stock: Low first' },
   { key: 'stock-desc', label: 'Stock: High first' },
   { key: 'price-asc', label: 'Price: Low first' },

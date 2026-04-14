@@ -1,6 +1,6 @@
 'use client';
 import { useLiveQuery } from 'dexie-react-hooks';
-import { db, Debt } from '@/lib/db';
+import { db } from '@/lib/db';
 import { useState } from 'react';
 
 const EMPTY_FORM = { customerName: '', amount: '', note: '' };

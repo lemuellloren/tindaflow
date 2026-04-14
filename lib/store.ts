@@ -1,7 +1,13 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type Tab = 'dashboard' | 'inventory' | 'sales' | 'debts' | 'reports' | 'settings';
+export type Tab =
+  | 'dashboard'
+  | 'inventory'
+  | 'sales'
+  | 'debts'
+  | 'reports'
+  | 'settings';
 
 interface AppState {
   activeTab: Tab;
@@ -10,6 +16,8 @@ interface AppState {
   setProfileName: (name: string) => void;
   storeName: string;
   setStoreName: (name: string) => void;
+  openAddProduct: boolean;
+  setOpenAddProduct: (val: boolean) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -21,6 +29,8 @@ export const useAppStore = create<AppState>()(
       setProfileName: (name) => set({ profileName: name }),
       storeName: 'My Store',
       setStoreName: (name) => set({ storeName: name }),
+      openAddProduct: false,
+      setOpenAddProduct: (val) => set({ openAddProduct: val }),
     }),
     {
       name: 'tindaflow-settings',
@@ -28,6 +38,6 @@ export const useAppStore = create<AppState>()(
         profileName: state.profileName,
         storeName: state.storeName,
       }),
-    }
-  )
+    },
+  ),
 );

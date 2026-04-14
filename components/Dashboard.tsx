@@ -12,7 +12,8 @@ function getToday() {
 }
 
 export default function Dashboard() {
-  const { profileName, storeName, setActiveTab } = useAppStore();
+  const { profileName, storeName, setActiveTab, setOpenAddProduct } =
+    useAppStore();
   const today = getToday();
 
   const todaySales = useLiveQuery(
@@ -139,6 +140,15 @@ export default function Dashboard() {
             className='flex-1 bg-green-500 text-white rounded-xl py-3 text-sm font-medium'
           >
             + Record Sale
+          </button>
+          <button
+            onClick={() => {
+              setOpenAddProduct(true);
+              setActiveTab('inventory');
+            }}
+            className='flex-1 border border-gray-200 text-gray-700 rounded-xl py-3 text-sm font-medium bg-white'
+          >
+            + New Product
           </button>
           <button
             onClick={() => setActiveTab('inventory')}

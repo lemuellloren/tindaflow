@@ -1,8 +1,9 @@
 'use client';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, Product } from '@/lib/db';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useProductSort, SORT_OPTIONS } from '@/lib/useProductSort';
+import { useAppStore } from '@/lib/store';
 
 const EMPTY_FORM = {
   name: '',
@@ -16,6 +17,7 @@ const EMPTY_FORM = {
 export default function Inventory() {
   const products = useLiveQuery(() => db.products.toArray(), []);
   const { sort, setSort, sorted } = useProductSort(products);
+  const { openAddProduct, setOpenAddProduct } = useAppStore();
 
   const [showForm, setShowForm] = useState(false);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
@@ -23,6 +25,16 @@ export default function Inventory() {
   const [search, setSearch] = useState('');
   const [restockId, setRestockId] = useState<number | null>(null);
   const [restockQty, setRestockQty] = useState('');
+
+  // Open add modal when triggered from Dashboard quick action
+  useEffect(() => {
+    if (openAddProduct) {
+      setEditProduct(null);
+      setForm(EMPTY_FORM);
+      setShowForm(true);
+      setOpenAddProduct(false);
+    }
+  }, [openAddProduct, setOpenAddProduct]);
 
   function openAdd() {
     setEditProduct(null);
