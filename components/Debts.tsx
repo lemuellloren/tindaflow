@@ -6,7 +6,10 @@ import { useState } from 'react';
 const EMPTY_FORM = { customerName: '', amount: '', note: '' };
 
 export default function Debts() {
-  const debts = useLiveQuery(() => db.debts.orderBy('createdAt').reverse().toArray(), []);
+  const debts = useLiveQuery(
+    () => db.debts.orderBy('createdAt').reverse().toArray(),
+    [],
+  );
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(EMPTY_FORM);
   const [filter, setFilter] = useState<'all' | 'unpaid' | 'paid'>('unpaid');
@@ -49,25 +52,25 @@ export default function Debts() {
   });
 
   return (
-    <div className="p-4 space-y-4">
+    <div className='p-4 space-y-4'>
       {/* Summary */}
-      <div className="border border-gray-200 rounded-xl p-4 flex items-center justify-between">
+      <div className='border border-gray-200 rounded-xl p-4 flex items-center justify-between'>
         <div>
-          <p className="text-xs text-gray-500">Total Unpaid</p>
-          <p className="text-2xl font-semibold text-gray-900">
+          <p className='text-xs text-gray-500'>Total Unpaid</p>
+          <p className='text-2xl font-semibold text-gray-900'>
             ₱{totalUnpaid.toLocaleString()}
           </p>
         </div>
         <button
           onClick={() => setShowForm(true)}
-          className="bg-green-500 text-white rounded-xl px-4 py-2 text-sm font-medium"
+          className='bg-green-500 text-white rounded-xl px-4 py-2 text-sm font-medium'
         >
           + Add Debt
         </button>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex gap-2">
+      <div className='flex gap-2'>
         {(['unpaid', 'paid', 'all'] as const).map((f) => (
           <button
             key={f}
@@ -85,11 +88,11 @@ export default function Debts() {
 
       {/* Debt List */}
       {filtered.length === 0 ? (
-        <p className="text-sm text-gray-400 text-center py-10">
+        <p className='text-sm text-gray-400 text-center py-10'>
           {filter === 'unpaid' ? 'No unpaid debts. Nice! 🎉' : 'No records.'}
         </p>
       ) : (
-        <div className="space-y-2">
+        <div className='space-y-2'>
           {filtered.map((debt) => (
             <div
               key={debt.id}
@@ -97,7 +100,7 @@ export default function Debts() {
                 debt.paid ? 'border-gray-100 bg-gray-50' : 'border-gray-200'
               }`}
             >
-              <div className="flex items-start justify-between">
+              <div className='flex items-start justify-between'>
                 <div>
                   <p
                     className={`text-sm font-medium ${
@@ -107,16 +110,25 @@ export default function Debts() {
                     {debt.customerName}
                   </p>
                   {debt.note && (
-                    <p className="text-xs text-gray-400 mt-0.5 italic">{debt.note}</p>
+                    <p className='text-xs text-gray-400 mt-0.5 italic'>
+                      {debt.note}
+                    </p>
                   )}
-                  <p className="text-xs text-gray-400 mt-0.5">
+                  <p className='text-xs text-gray-400 mt-0.5'>
                     {new Date(debt.createdAt).toLocaleDateString('en-PH', {
                       month: 'short',
                       day: 'numeric',
                       year: 'numeric',
                     })}
                     {debt.paid && debt.paidAt && (
-                      <> · Paid {new Date(debt.paidAt).toLocaleDateString('en-PH', { month: 'short', day: 'numeric' })}</>
+                      <>
+                        {' '}
+                        · Paid{' '}
+                        {new Date(debt.paidAt).toLocaleDateString('en-PH', {
+                          month: 'short',
+                          day: 'numeric',
+                        })}
+                      </>
                     )}
                   </p>
                 </div>
@@ -129,25 +141,25 @@ export default function Debts() {
                 </p>
               </div>
 
-              <div className="flex gap-2 mt-3">
+              <div className='flex gap-2 mt-3'>
                 {!debt.paid ? (
                   <button
                     onClick={() => markPaid(debt.id!)}
-                    className="text-xs bg-green-50 border border-green-200 text-green-700 rounded-lg px-3 py-1.5"
+                    className='text-xs bg-green-50 border border-green-200 text-green-700 rounded-lg px-3 py-1.5'
                   >
                     Mark Paid
                   </button>
                 ) : (
                   <button
                     onClick={() => markUnpaid(debt.id!)}
-                    className="text-xs border border-gray-200 text-gray-500 rounded-lg px-3 py-1.5"
+                    className='text-xs border border-gray-200 text-gray-500 rounded-lg px-3 py-1.5'
                   >
                     Undo
                   </button>
                 )}
                 <button
                   onClick={() => handleDelete(debt.id!)}
-                  className="text-xs border border-red-100 text-red-400 rounded-lg px-3 py-1.5"
+                  className='text-xs border border-red-100 text-red-400 rounded-lg px-3 py-1.5'
                 >
                   Delete
                 </button>
@@ -159,37 +171,44 @@ export default function Debts() {
 
       {/* Add Debt Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black/40 z-50 flex items-end">
-          <div className="bg-white w-full max-w-md mx-auto rounded-t-2xl p-5">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="font-semibold text-gray-900">Add Debt Record</h2>
-              <button onClick={() => setShowForm(false)} className="text-gray-400 text-xl">✕</button>
+        <div className='fixed inset-0 bg-black/40 z-50 flex items-end md:items-center md:justify-center'>
+          <div className='bg-white w-full max-w-md mx-auto rounded-t-2xl md:rounded-2xl p-5'>
+            <div className='flex justify-between items-center mb-4'>
+              <h2 className='font-semibold text-gray-900'>Add Debt Record</h2>
+              <button
+                onClick={() => setShowForm(false)}
+                className='text-gray-400 text-xl'
+              >
+                ✕
+              </button>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className='space-y-3'>
               <input
                 required
-                placeholder="Customer name"
+                placeholder='Customer name'
                 value={form.customerName}
-                onChange={(e) => setForm({ ...form, customerName: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400"
+                onChange={(e) =>
+                  setForm({ ...form, customerName: e.target.value })
+                }
+                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400'
               />
               <input
                 required
-                type="number"
-                placeholder="Amount (₱)"
+                type='number'
+                placeholder='Amount (₱)'
                 value={form.amount}
                 onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400"
+                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400'
               />
               <input
-                placeholder="Note (optional)"
+                placeholder='Note (optional)'
                 value={form.note}
                 onChange={(e) => setForm({ ...form, note: e.target.value })}
-                className="w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400"
+                className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400'
               />
               <button
-                type="submit"
-                className="w-full bg-green-500 text-white rounded-xl py-3 text-sm font-medium"
+                type='submit'
+                className='w-full bg-green-500 text-white rounded-xl py-3 text-sm font-medium'
               >
                 Add Debt
               </button>
