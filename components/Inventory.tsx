@@ -2,6 +2,7 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { db, Product } from '@/lib/db';
 import { useState } from 'react';
+import { useProductSort, SORT_OPTIONS } from '@/lib/useProductSort';
 
 const EMPTY_FORM = {
   name: '',
@@ -13,10 +14,9 @@ const EMPTY_FORM = {
 };
 
 export default function Inventory() {
-  const products = useLiveQuery(
-    () => db.products.orderBy('name').toArray(),
-    [],
-  );
+  const products = useLiveQuery(() => db.products.toArray(), []);
+  const { sort, setSort, sorted } = useProductSort(products);
+
   const [showForm, setShowForm] = useState(false);
   const [editProduct, setEditProduct] = useState<Product | null>(null);
   const [form, setForm] = useState(EMPTY_FORM);
@@ -52,7 +52,7 @@ export default function Inventory() {
       cost: parseFloat(form.cost) || 0,
       stock: parseInt(form.stock) || 0,
       unit: form.unit,
-      category: form.category.trim(),
+      category: form.category.trim() || 'Uncategorized',
       updatedAt: now,
     };
     if (editProduct?.id) {
@@ -83,12 +83,13 @@ export default function Inventory() {
     setRestockQty('');
   }
 
-  const filtered = (products ?? []).filter((p) =>
+  const filtered = sorted.filter((p) =>
     p.name.toLowerCase().includes(search.toLowerCase()),
   );
 
   return (
     <div className='p-4 space-y-4'>
+      {/* Search + Sort + Add */}
       <div className='flex gap-2'>
         <input
           type='text'
@@ -97,9 +98,20 @@ export default function Inventory() {
           onChange={(e) => setSearch(e.target.value)}
           className='flex-1 border border-gray-200 rounded-xl px-3 py-2 text-sm outline-none focus:border-green-400'
         />
+        <select
+          value={sort}
+          onChange={(e) => setSort(e.target.value as typeof sort)}
+          className='border border-gray-200 rounded-xl px-2 py-2 text-xs outline-none focus:border-green-400 bg-white text-gray-600'
+        >
+          {SORT_OPTIONS.map((o) => (
+            <option key={o.key} value={o.key}>
+              {o.label}
+            </option>
+          ))}
+        </select>
         <button
           onClick={openAdd}
-          className='bg-green-500 text-white rounded-xl px-4 py-2 text-sm font-medium'
+          className='bg-green-500 text-white rounded-xl px-4 py-2 text-sm font-medium shrink-0'
         >
           + Add
         </button>
@@ -250,7 +262,7 @@ export default function Inventory() {
                 />
               </div>
               <input
-                placeholder='Category (optional)'
+                placeholder='Category (default: Uncategorized)'
                 value={form.category}
                 onChange={(e) => setForm({ ...form, category: e.target.value })}
                 className='w-full border border-gray-200 rounded-xl px-3 py-2.5 text-sm outline-none focus:border-green-400'
