@@ -1,13 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export type Tab =
-  | 'dashboard'
-  | 'inventory'
-  | 'sales'
-  | 'debts'
-  | 'reports'
-  | 'settings';
+export type Tab = 'dashboard' | 'inventory' | 'sales' | 'debts' | 'reports' | 'settings';
 
 interface AppState {
   activeTab: Tab;
@@ -38,6 +32,6 @@ export const useAppStore = create<AppState>()(
         profileName: state.profileName,
         storeName: state.storeName,
       }),
-    },
-  ),
+    }
+  )
 );

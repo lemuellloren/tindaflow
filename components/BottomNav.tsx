@@ -1,5 +1,7 @@
 'use client';
 import { useAppStore, Tab } from '@/lib/store';
+import { cn } from '@/lib/utils';
+import { LayoutDashboard, Package, Plus, BarChart2, Settings } from 'lucide-react';
 
 interface TabDef {
   key: Tab;
@@ -9,132 +11,44 @@ interface TabDef {
 }
 
 const tabs: TabDef[] = [
-  {
-    key: 'dashboard',
-    label: 'Home',
-    icon: (
-      <svg
-        className='w-5 h-5'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={1.8}
-        viewBox='0 0 24 24'
-      >
-        <rect x='3' y='3' width='7' height='7' rx='1.5' />
-        <rect x='14' y='3' width='7' height='7' rx='1.5' />
-        <rect x='3' y='14' width='7' height='7' rx='1.5' />
-        <rect x='14' y='14' width='7' height='7' rx='1.5' />
-      </svg>
-    ),
-  },
-  {
-    key: 'inventory',
-    label: 'Inventory',
-    icon: (
-      <svg
-        className='w-5 h-5'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={1.8}
-        viewBox='0 0 24 24'
-      >
-        <path d='M20 7H4a1 1 0 00-1 1v11a1 1 0 001 1h16a1 1 0 001-1V8a1 1 0 00-1-1z' />
-        <path d='M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2' />
-      </svg>
-    ),
-  },
-  {
-    key: 'sales',
-    label: 'Sale',
-    special: true,
-    icon: (
-      <svg
-        className='w-5 h-5'
-        fill='none'
-        stroke='white'
-        strokeWidth={2.2}
-        viewBox='0 0 24 24'
-      >
-        <path d='M12 5v14M5 12h14' strokeLinecap='round' />
-      </svg>
-    ),
-  },
-  {
-    key: 'reports',
-    label: 'Reports',
-    icon: (
-      <svg
-        className='w-5 h-5'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={1.8}
-        viewBox='0 0 24 24'
-      >
-        <path d='M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z' />
-      </svg>
-    ),
-  },
-  {
-    key: 'settings',
-    label: 'Settings',
-    icon: (
-      <svg
-        className='w-5 h-5'
-        fill='none'
-        stroke='currentColor'
-        strokeWidth={1.8}
-        viewBox='0 0 24 24'
-      >
-        <circle cx='12' cy='12' r='3' />
-        <path d='M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z' />
-      </svg>
-    ),
-  },
+  { key: 'dashboard', label: 'Home',      icon: <LayoutDashboard className="w-5 h-5" /> },
+  { key: 'inventory', label: 'Inventory', icon: <Package className="w-5 h-5" /> },
+  { key: 'sales',     label: 'Sale',      special: true, icon: <Plus className="w-5 h-5 text-primary-foreground" /> },
+  { key: 'reports',   label: 'Reports',   icon: <BarChart2 className="w-5 h-5" /> },
+  { key: 'settings',  label: 'Settings',  icon: <Settings className="w-5 h-5" /> },
 ];
 
 export default function BottomNav() {
   const { activeTab, setActiveTab } = useAppStore();
-
   const regularTabs = tabs.filter((t) => !t.special);
-  const saleTabs = tabs.filter((t) => t.special);
+  const saleTabs    = tabs.filter((t) => t.special);
 
   return (
-    <nav className='border-t border-gray-200 bg-white'>
-      {/* Sale CTA — full width */}
+    <nav className="border-t border-border bg-card">
       {saleTabs.map((tab) => (
         <button
           key={tab.key}
           onClick={() => setActiveTab(tab.key)}
-          className={`w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold transition-colors ${
-            activeTab === tab.key
-              ? 'bg-green-600 text-white'
-              : 'bg-green-500 text-white active:bg-green-600'
-          }`}
+          className={cn(
+            'w-full flex items-center justify-center gap-2 py-3 text-sm font-semibold transition-colors',
+            activeTab === tab.key ? 'bg-brand-600 text-white' : 'bg-primary text-primary-foreground hover:bg-brand-600'
+          )}
         >
-          <svg
-            className='w-4 h-4'
-            fill='none'
-            stroke='white'
-            strokeWidth={2.5}
-            viewBox='0 0 24 24'
-          >
-            <path d='M12 5v14M5 12h14' strokeLinecap='round' />
-          </svg>
+          <Plus className="w-4 h-4" />
           Record Sale
         </button>
       ))}
-
-      {/* Regular tabs */}
-      <div className='flex'>
+      <div className="flex">
         {regularTabs.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
-              className={`flex-1 flex flex-col items-center py-2 gap-0.5 text-[10px] transition-colors ${
-                isActive ? 'text-green-600' : 'text-gray-400'
-              }`}
+              className={cn(
+                'flex-1 flex flex-col items-center py-2 gap-0.5 text-[10px] transition-colors',
+                isActive ? 'text-primary' : 'text-muted-foreground'
+              )}
             >
               {tab.icon}
               <span>{tab.label}</span>

@@ -1,16 +1,75 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-* {
-  box-sizing: border-box;
+@layer base {
+  :root {
+    /* ═══════════════════════════════════════════════════════════
+       BRAND COLOR — change these three values to retheme the app
+       Current: TindaFlow Green  #22C55E → hsl(142 71% 45%)
+       Example alternatives:
+         Blue   #3B82F6 → 217 91% 60%
+         Purple #8B5CF6 → 258 90% 66%
+         Orange #F97316 → 25 95% 53%
+    ═══════════════════════════════════════════════════════════ */
+    --brand-h: 142;
+    --brand-s: 71%;
+    --brand-l: 45%;
+
+    /* ─── shadcn base tokens ─────────────────────────────────── */
+    --background:         0 0% 100%;
+    --foreground:         222 47% 11%;
+    --card:               0 0% 100%;
+    --card-foreground:    222 47% 11%;
+    --popover:            0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* primary maps to brand */
+    --primary:            var(--brand-h) var(--brand-s) var(--brand-l);
+    --primary-foreground: 0 0% 100%;
+
+    --secondary:          220 14% 96%;
+    --secondary-foreground: 222 47% 11%;
+    --muted:              220 14% 96%;
+    --muted-foreground:   215 16% 47%;
+    --accent:             220 14% 96%;
+    --accent-foreground:  222 47% 11%;
+    --destructive:        0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border:             220 13% 91%;
+    --input:              220 13% 91%;
+    --ring:               var(--brand-h) var(--brand-s) var(--brand-l);
+    --radius:             0.75rem;
+  }
+
+  .dark {
+    --background:         222 47% 11%;
+    --foreground:         210 40% 98%;
+    --card:               222 47% 11%;
+    --card-foreground:    210 40% 98%;
+    --popover:            222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary:            var(--brand-h) var(--brand-s) var(--brand-l);
+    --primary-foreground: 0 0% 100%;
+    --secondary:          217 33% 17%;
+    --secondary-foreground: 210 40% 98%;
+    --muted:              217 33% 17%;
+    --muted-foreground:   215 20% 65%;
+    --accent:             217 33% 17%;
+    --accent-foreground:  210 40% 98%;
+    --destructive:        0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+    --border:             217 33% 17%;
+    --input:              217 33% 17%;
+    --ring:               var(--brand-h) var(--brand-s) var(--brand-l);
+  }
 }
 
-html,
-body {
-  height: 100%;
-  overflow: hidden;
-}
-
-#__next,
-main {
-  height: 100%;
+@layer base {
+  * { box-sizing: border-box; }
+  body {
+    @apply bg-background text-foreground;
+    font-family: system-ui, -apple-system, sans-serif;
+  }
+  html, body { height: 100%; }
 }
